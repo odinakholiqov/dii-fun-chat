@@ -1,5 +1,6 @@
 from app import app
 from flask import render_template
+from app.forms import LoginForm
 
 """
 if request in ("http://dii.tj/", "http://dii.tj/index", 1)":
@@ -8,15 +9,8 @@ if request in ("http://dii.tj/", "http://dii.tj/index", 1)":
 """
 
 @app.route('/')
-@app.route('/index')
 def index():
-    return "Hello, World!"
-
-
-@app.route('/')
-@app.route('/dii')
-def dii_special_hello_msg():
-    return "Salam, Aleykum!"
+    return render_template('index.html')
 
 
 @app.route('/main')
@@ -31,3 +25,9 @@ def main_page():
         title=title,
         user=user,
     )
+
+
+@app.route('/login')
+def login():
+    form = LoginForm()
+    return render_template('login.html', title='Sign In', form=form)
