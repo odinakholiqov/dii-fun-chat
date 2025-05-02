@@ -7,7 +7,7 @@ from datetime import timezone
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from flask_login import UserMixin
-
+from app import login
 
 class User(db.Model, UserMixin):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -26,6 +26,10 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+@login.user_loader
+def load_user(id: str):
+    return db.session.get(User, str(id))
 
 
 class Post(db.Model):
