@@ -2,6 +2,7 @@ from app import app
 from flask import render_template
 from app.forms import LoginForm
 from flask_login import current_user, login_user, logout_user
+from flask_login import login_required
 from flask import redirect
 from flask import url_for
 import sqlalchemy as sa
@@ -10,13 +11,24 @@ from app import db
 from flask import flash
 from app.models import Post
 
-@app.route("/")
+
+@app.route('/')
+@app.route('/index')
+@login_required
 def index():
-    return render_template(
-        "main.html",
-        title="Driving",
-        short_desc="A book that teaches driving"
-    )
+    posts = [
+        {
+            'author': {'username': 'John'},
+            'body': 'Beautiful day in Portland!'
+        },
+        {
+            'author': {'username': 'Susan'},
+            'body': 'The Avengers movie was so cool!'
+        }
+    ]
+
+    return render_template("index.html", title='Home Page', posts=posts)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
